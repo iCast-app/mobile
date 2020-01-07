@@ -1,6 +1,6 @@
-import React from "react";
+import React, { Component } from "react";
 // import css from "./style_sheets";
-import Main from "./src/screens/Main";
+import Main from "./src/screens/Main.jsx";
 
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
@@ -16,20 +16,19 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-const store = createStore(reducer);
+const LOCAL_CLOUD = createStore(reducer);
 
-export default class App extends React.Component {
-  render() {
-    const AppNavigator = createStackNavigator(
-      { Main },
-      { initialRouteName: "Main" }
-    );
-    const AppContainer = createAppContainer(AppNavigator);
-    return (
-      <Provider store={store}>
-        <AppContainer />
-      </Provider>
-    );
-  }
+const localStack = createStackNavigator(
+  { Main: Main },
+  { initialRouteName: "Main" }
+);
+const _navigator = createAppContainer(localStack);
+
+export default class App extends Component {
+  render = () => (
+    <Provider store={LOCAL_CLOUD}>
+      <_navigator />
+    </Provider>
+  );
 }
 console.disableYellowBox = true;
