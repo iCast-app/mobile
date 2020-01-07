@@ -1,11 +1,35 @@
 import React from "react";
-import { Text, View } from "react-native";
-import css from "./style_sheets";
+// import css from "./style_sheets";
+import Main from "./src/screens/Main";
 
-export default function App() {
-  return (
-    <View style={css.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
+
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+
+const initialState = {};
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
+
+const store = createStore(reducer);
+
+export default class App extends React.Component {
+  render() {
+    const AppNavigator = createStackNavigator(
+      { Main },
+      { initialRouteName: "Main" }
+    );
+    const AppContainer = createAppContainer(AppNavigator);
+    return (
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+    );
+  }
 }
+console.disableYellowBox = true;
