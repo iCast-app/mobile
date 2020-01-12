@@ -15,11 +15,9 @@ const up = `../../assets`;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const Users = [
-  { id: "1", uri: require(`${up}/1.jpg`) },
-  { id: "2", uri: require(`${up}/2.jpg`) },
-  { id: "3", uri: require(`${up}/3.jpg`) },
-  { id: "4", uri: require(`${up}/4.jpg`) },
-  { id: "5", uri: require(`${up}/5.jpg`) }
+  { id: "1", uri: { uri: "https://picsum.photos/seed/asdf/200/400" } },
+  { id: "2", uri: { uri: "https://picsum.photos/seed/zxcv/200/400" } },
+  { id: "3", uri: { uri: "https://picsum.photos/seed/acdd/200/400" } }
 ];
 
 export default class App extends React.Component {
@@ -104,6 +102,7 @@ export default class App extends React.Component {
         <TopCard
           panProps={this.PanResponder.panHandlers}
           item={item}
+          i={i}
           dislikeOpacity={this.dislikeOpacity}
           likeOpacity={this.likeOpacity}
           rotateAndTranslate={this.rotateAndTranslate}
@@ -111,6 +110,7 @@ export default class App extends React.Component {
       ) : i > this.state.currentIndex ? (
         <NextCard
           item={item}
+          i={i}
           nextCardOpacity={this.nextCardOpacity}
           nextCardScale={this.nextCardScale}
         />
