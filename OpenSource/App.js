@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-// import css from "./style_sheets";
-import Main from "./src/screens/Main.jsx";
+import Main from "./src/components/Main";
 
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
@@ -19,7 +18,7 @@ const reducer = (state = initialState, action) => {
 const LOCAL_CLOUD = createStore(reducer);
 
 const localStack = createStackNavigator(
-  { Main: Main },
+  { Main: { screen: Main, navigationOptions: { header: null } } },
   { initialRouteName: "Main" }
 );
 const _navigator = createAppContainer(localStack);
