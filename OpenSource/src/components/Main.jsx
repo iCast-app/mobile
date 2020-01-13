@@ -11,6 +11,7 @@ import {
 import TopCard from "./TopCard";
 import NextCard from "./NextCard";
 import axios from "axios";
+import { url } from "../api";
 
 const up = `../../assets`;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
@@ -32,13 +33,6 @@ export default class Main extends React.Component {
       }
     ]
   };
-
-  // componentDidMount = async () => {
-  //   const download = await axios.get(
-  //     "https://source.unsplash.com/1600x900/?beach"
-  //   );
-  //   this.setState({ data: download.data }, () => console.log(this.state));
-  // };
 
   position = new Animated.ValueXY();
 
@@ -112,27 +106,48 @@ export default class Main extends React.Component {
     });
   };
   componentDidMount = async () => {
+    const random1 = Math.floor(Math.random() * 200);
+    const random2 = Math.floor(Math.random() * 200);
+    const random3 = Math.floor(Math.random() * 200);
     const download = await axios.get(
-      `https://source.unsplash.com/${SCREEN_WIDTH}x${SCREEN_HEIGHT}/?example`
+      `${url}/${SCREEN_WIDTH}x${SCREEN_HEIGHT}/?${random1}`
     );
     const download2 = await axios.get(
-      `https://source.unsplash.com/${SCREEN_WIDTH}x${SCREEN_HEIGHT}/?example`
+      `${url}/${SCREEN_WIDTH}x${SCREEN_HEIGHT}/?${random2}`
     );
-    console.log(download.request.responseURL);
-    this.setState({
-      theData: [
-        {
-          uri: {
-            uri: download.request.responseURL
+    const download3 = await axios.get(
+      `${url}/${SCREEN_WIDTH}x${SCREEN_HEIGHT}/?${random3}`
+    );
+    const download4 = await axios.get(
+      `${url}/${SCREEN_WIDTH}x${SCREEN_HEIGHT}/?${random1}`
+    );
+    this.setState(
+      {
+        theData: [
+          {
+            uri: {
+              uri: download.request.responseURL
+            }
+          },
+          {
+            uri: {
+              uri: download2.request.responseURL
+            }
+          },
+          {
+            uri: {
+              uri: download3.request.responseURL
+            }
+          },
+          {
+            uri: {
+              uri: download4.request.responseURL
+            }
           }
-        },
-        {
-          uri: {
-            uri: download2.request.responseURL
-          }
-        }
-      ]
-    });
+        ]
+      },
+      () => console.log(this.state)
+    );
   };
 
   loadCards = () =>
@@ -168,12 +183,3 @@ export default class Main extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
