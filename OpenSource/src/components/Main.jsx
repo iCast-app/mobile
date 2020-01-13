@@ -10,21 +10,37 @@ import {
 } from "react-native";
 import TopCard from "./TopCard";
 import NextCard from "./NextCard";
+import axios from "axios";
 
 const up = `../../assets`;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 const SCREEN_WIDTH = Dimensions.get("window").width;
-const Users = [
-  { id: "1", uri: { uri: "https://picsum.photos/seed/asdf/200/400" } },
-  { id: "2", uri: { uri: "https://picsum.photos/seed/zxcv/200/400" } },
-  { id: "3", uri: { uri: "https://picsum.photos/seed/acdd/200/400" } }
-];
 
-export default class App extends React.Component {
-  position = new Animated.ValueXY();
+export default class Main extends React.Component {
   state = {
-    currentIndex: 0
+    currentIndex: 0,
+    theData: [
+      {
+        uri: {
+          uri: ``
+        }
+      },
+      {
+        uri: {
+          uri: ``
+        }
+      }
+    ]
   };
+
+  // componentDidMount = async () => {
+  //   const download = await axios.get(
+  //     "https://source.unsplash.com/1600x900/?beach"
+  //   );
+  //   this.setState({ data: download.data }, () => console.log(this.state));
+  // };
+
+  position = new Animated.ValueXY();
 
   rotate = this.position.x.interpolate({
     inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
@@ -63,7 +79,7 @@ export default class App extends React.Component {
     extrapolate: "clamp"
   });
 
-  componentWillMount() {
+  componentWillMount = async () => {
     this.PanResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderMove: (evt, gestureState) => {
@@ -94,28 +110,53 @@ export default class App extends React.Component {
         }
       }
     });
-  }
+  };
+  componentDidMount = async () => {
+    const download = await axios.get(
+      `https://source.unsplash.com/${SCREEN_WIDTH}x${SCREEN_HEIGHT}/?example`
+    );
+    const download2 = await axios.get(
+      `https://source.unsplash.com/${SCREEN_WIDTH}x${SCREEN_HEIGHT}/?example`
+    );
+    console.log(download.request.responseURL);
+    this.setState({
+      theData: [
+        {
+          uri: {
+            uri: download.request.responseURL
+          }
+        },
+        {
+          uri: {
+            uri: download2.request.responseURL
+          }
+        }
+      ]
+    });
+  };
 
   loadCards = () =>
-    Users.map((item, i) =>
-      i === this.state.currentIndex ? (
-        <TopCard
-          panProps={this.PanResponder.panHandlers}
-          item={item}
-          i={i}
-          dislikeOpacity={this.dislikeOpacity}
-          likeOpacity={this.likeOpacity}
-          rotateAndTranslate={this.rotateAndTranslate}
-        />
-      ) : i > this.state.currentIndex ? (
-        <NextCard
-          item={item}
-          i={i}
-          nextCardOpacity={this.nextCardOpacity}
-          nextCardScale={this.nextCardScale}
-        />
-      ) : null
-    ).reverse();
+    this.state.theData
+      .map((item, i) =>
+        i == this.state.currentIndex ? (
+          <TopCard
+            panProps={this.PanResponder.panHandlers}
+            item={item}
+            i={i}
+            dislikeOpacity={this.dislikeOpacity}
+            likeOpacity={this.likeOpacity}
+            rotateAndTranslate={this.rotateAndTranslate}
+          />
+        ) : i > this.state.currentIndex ? (
+          <NextCard
+            item={item}
+            i={i}
+            nextCardOpacity={this.nextCardOpacity}
+            nextCardScale={this.nextCardScale}
+          />
+        ) : null
+      )
+      .reverse();
 
   render() {
     return (
